@@ -111,7 +111,7 @@ yum -y clean all
 
 ########   Run Rundeck  ########
 
-CMD source /etc/rundeck/profile && ${JAVA_HOME:-/usr}/bin/java ${RDECK_JVM} -cp ${BOOTSTRAP_CP} com.dtolabs.rundeck.RunServer /var/lib/rundeck ${RDECK_HTTP_PORT}
+#CMD source /etc/rundeck/profile && ${JAVA_HOME:-/usr}/bin/java ${RDECK_JVM} -cp ${BOOTSTRAP_CP} com.dtolabs.rundeck.RunServer /var/lib/rundeck ${RDECK_HTTP_PORT}
 
 VOLUME ["/etc/rundeck", "/var/rundeck", "/var/lib/rundeck", "/var/log/rundeck"]
 
