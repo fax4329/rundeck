@@ -16,6 +16,8 @@ ENV URL http://localhost:4440
 #ENV OLDLDAP jaas-loginmodule.conf
 #ENV NEWLDAP jaas-ldap.conf
 
+USER root
+
 ######## Install rundeck and required packages ########
 
 RUN rpm -Uvh http://repo.rundeck.org/latest.rpm 
