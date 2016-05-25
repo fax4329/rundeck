@@ -5,9 +5,9 @@ MAINTAINER Kedrick Cooper
 LABEL Description="RUNDECK Image"
 
 ENV HOST localhost
-ENV HOST1 192.168.99.100
+#ENV HOST1 192.168.99.100
 ENV URL http://localhost:4440
-ENV URL1 http://192.168.99.100:4440
+#ENV URL1 http://192.168.99.100:4440
 #ENV PORT 4440
 #ENV MYSQL_HOST localhost
 #ENV MYSQL_DATABASE rundeck
@@ -39,12 +39,12 @@ yum -y clean all
 ######## Set Rundeck Environment Variables #########
 
 
-RUN  sed -i '/framework.server.url/d' /etc/rundeck/framework.properties && \
-     echo "framework.server.url = ${URL1}" >> /etc/rundeck/framework.properties
+#RUN  sed -i '/framework.server.url/d' /etc/rundeck/framework.properties && \
+#     echo "framework.server.url = ${URL1}" >> /etc/rundeck/framework.properties
 
-RUN  sed -i "s/${HOST}/${HOST1}/g" /etc/rundeck/framework.properties
+#RUN  sed -i "s/${HOST}/${HOST1}/g" /etc/rundeck/framework.properties
 
-RUN  sed -i "s/${HOST}/${HOST1}/g" /etc/rundeck/rundeck-config.properties
+#RUN  sed -i "s/${HOST}/${HOST1}/g" /etc/rundeck/rundeck-config.properties
 
 #RUN echo "Preparing RUNDECK on ${URL}" && \
 #    sed -i '/dataSource.url/d' /etc/rundeck/rundeck-config.properties && \
@@ -110,5 +110,7 @@ RUN  sed -i "s/${HOST}/${HOST1}/g" /etc/rundeck/rundeck-config.properties
 ########   Run Rundeck  ########
 
 CMD source /etc/rundeck/profile && ${JAVA_HOME:-/usr}/bin/java ${RDECK_JVM} -cp ${BOOTSTRAP_CP} com.dtolabs.rundeck.RunServer /var/lib/rundeck ${RDECK_HTTP_PORT}
+
+VOLUME ["/etc/rundeck", "/var/rundeck", "/var/lib/rundeck", "/var/log/rundeck"]
 
 EXPOSE 4440
