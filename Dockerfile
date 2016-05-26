@@ -16,13 +16,23 @@ ENV URL1 http://192.168.99.100:4440
 #ENV OLDLDAP jaas-loginmodule.conf
 #ENV NEWLDAP jaas-ldap.conf
 
+######## Update and Clean installation  ########
+
+RUN yum -y update
+RUN yum -y clean all
+
+USER root
+######## Install Java and Rundeck  ########
+
+RUN yum -y install java-1.8.0-openjdk
+
 ######## Install rundeck and required packages ########
 
 RUN rpm -Uvh http://repo.rundeck.org/latest.rpm 
+RUN yum -y install rundeck
 
-######## Install Java and Rundeck  ########
-
-RUN yum -y install java-1.8.0-openjdk rundeck 
+RUN ls -d /etc/rundeck
+RUN hostname
 
 ######## Install MYSQL database  ########
 
@@ -31,10 +41,6 @@ RUN yum -y install java-1.8.0-openjdk rundeck
 #rpm -i mysql-community-release-el7-5.noarch.rpm && \
 #yum -y install mysql-server 
 
-######## Update and Clean installation  ########
-
-RUN yum -y update && \
-yum -y clean all
 
 ######## Set Rundeck Environment Variables #########
 
@@ -109,6 +115,6 @@ RUN  sed -i "s/${HOST}/${HOST1}/g" /etc/rundeck/rundeck-config.properties
 
 ########   Run Rundeck  ########
 
-CMD source /etc/rundeck/profile && ${JAVA_HOME:-/usr}/bin/java ${RDECK_JVM} -cp ${BOOTSTRAP_CP} com.dtolabs.rundeck.RunServer /var/lib/rundeck ${RDECK_HTTP_PORT}
+CMD while | echo exit | source /etc/rundeck/profile && ${JAVA_HOME:-/usr}/bin/java ${RDECK_JVM} -cp ${BOOTSTRAP_CP} com.dtolabs.rundeck.RunServer /var/lib/rundeck ${RDECK_HTTP_PORT}
 
 EXPOSE 4440
