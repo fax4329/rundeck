@@ -115,6 +115,6 @@ RUN  sed -i "s/${HOST}/${HOST1}/g" /etc/rundeck/rundeck-config.properties
 
 ########   Run Rundeck  ########
 
-CMD while | echo exit | source /etc/rundeck/profile && ${JAVA_HOME:-/usr}/bin/java ${RDECK_JVM} -cp ${BOOTSTRAP_CP} com.dtolabs.rundeck.RunServer /var/lib/rundeck ${RDECK_HTTP_PORT}
+CMD while ! echo exit | source /etc/rundeck/profile && ${JAVA_HOME:-/usr}/bin/java ${RDECK_JVM} -cp ${BOOTSTRAP_CP} com.dtolabs.rundeck.RunServer /var/lib/rundeck ${RDECK_HTTP_PORT}
 
 EXPOSE 4440
