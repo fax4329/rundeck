@@ -4,29 +4,40 @@ MAINTAINER Kedrick Cooper
 
 LABEL Description="RUNDECK Image"
 
-USER root
 
-######## Install rundeck and required packages ########
-
-RUN yum -y update
-
-RUN rpm -Uvh http://repo.rundeck.org/latest.rpm 
-
-######## Install Java and Rundeck  ########
-
-RUN yum -y install java-1.8.0-openjdk 
-RUN yum -y install rundeck 
+ENV RDECK_BASE=/var/lib/rundeck
 
 ######## Update and Clean installation  ########
 
+RUN yum -y update 
 RUN yum -y clean all
 
-########   Run Rundeck  ########
+######## Install Java  ########
 
-#CMD source /etc/rundeck/profile && ${JAVA_HOME:-/usr}/bin/java ${RDECK_JVM} -cp ${BOOTSTRAP_CP} com.dtolabs.rundeck.RunServer /var/lib/rundeck ${RDECK_HTTP_PORT}
+RUN yum -y install java-1.8.0-openjdk
 
-VOLUME ["/etc/rundeck", "/var/rundeck", "/var/lib/rundeck", "/var/log/rundeck"]
+####### Create a service account ########
 
-EXPOSE 4440
+RUN useradd -d $RDECK_BASE -m rundeck
 
-CMD ["/bin/bash"] 
+######## Add the install commands ########
+
+ADD ./install.sh /
+ADD ./run.sh /
+
+######## Download Rundeck ########
+
+ADD http://repo.rundeck.org/latest.rpm /tmp/latest.rpm
+
+######## Run the installation script ########
+
+RUN /install.sh
+
+ENTRYPOINT /run.sh
+
+VOLUME /var/lib/rundeck/data
+VOLUME /var/lib/rundeck/var
+VOLUME /var/lib/rundeck/logs
+VOLUME /var/rundeck/projects
+
+EXPOSE 4440 4443
