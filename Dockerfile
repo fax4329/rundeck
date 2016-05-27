@@ -106,11 +106,21 @@ yum -y clean all
 #    echo "};" >> /etc/rundeck/jaas-ldap.conf
 
 ######## Change user and ownersheip and permissions ########
-USER rundeck
 
-RUN chown -R rundeck:rundeck /etc/rundeck /var/rundeck /var/lib/rundeck /var/log/rundeck
+RUN chown -R rundeck:rundeck /etc/rundeck 
+RUN chown -R rundeck:rundeck /var/rundeck 
+RUN chown -R rundeck:rundeck /var/lib/rundeck 
+RUN chown -R rundeck:rundeck /var/log/rundeck
+
+RUN chmod a=rwx /var/log/rundeck
+RUN chmod -R a=rwx /var/rundeck
+RUN chmod -R a=rwx /etc/rundeck
+RUN chmod -R a=rwx /var/lib/rundeck
+RUN chmod -R u=rwx /etc/init.d/rundeckd
 
 ########   Run Rundeck  ########
+
+USER rundeck
 
 CMD source /etc/rundeck/profile && ${JAVA_HOME:-/usr}/bin/java ${RDECK_JVM} -cp ${BOOTSTRAP_CP} com.dtolabs.rundeck.RunServer /var/lib/rundeck ${RDECK_HTTP_PORT}
 
