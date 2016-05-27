@@ -5,9 +5,9 @@ MAINTAINER Kedrick Cooper
 LABEL Description="RUNDECK Image"
 
 ENV HOST localhost
-ENV HOST1 192.168.99.100
+#ENV HOST1 192.168.99.100
 ENV URL http://localhost:4440
-ENV URL1 http://192.168.99.100:4440
+#ENV URL1 http://192.168.99.100:4440
 #ENV PORT 4440
 #ENV MYSQL_HOST localhost
 #ENV MYSQL_DATABASE rundeck
@@ -16,23 +16,13 @@ ENV URL1 http://192.168.99.100:4440
 #ENV OLDLDAP jaas-loginmodule.conf
 #ENV NEWLDAP jaas-ldap.conf
 
-######## Update and Clean installation  ########
-
-RUN yum -y update
-RUN yum -y clean all
-
-USER root
-######## Install Java and Rundeck  ########
-
-RUN yum -y install java-1.8.0-openjdk
-
 ######## Install rundeck and required packages ########
 
 RUN rpm -Uvh http://repo.rundeck.org/latest.rpm 
-RUN yum -y install rundeck
 
-RUN ls -d /etc/rundeck
-RUN hostname
+######## Install Java and Rundeck  ########
+
+RUN yum -y install java-1.8.0-openjdk rundeck 
 
 ######## Install MYSQL database  ########
 
@@ -41,16 +31,20 @@ RUN hostname
 #rpm -i mysql-community-release-el7-5.noarch.rpm && \
 #yum -y install mysql-server 
 
+######## Update and Clean installation  ########
+
+RUN yum -y update && \
+yum -y clean all
 
 ######## Set Rundeck Environment Variables #########
 
 
-RUN  sed -i '/framework.server.url/d' /etc/rundeck/framework.properties && \
+#RUN  sed -i '/framework.server.url/d' /etc/rundeck/framework.properties && \
      echo "framework.server.url = ${URL1}" >> /etc/rundeck/framework.properties
 
-RUN  sed -i "s/${HOST}/${HOST1}/g" /etc/rundeck/framework.properties
+#RUN  sed -i "s/${HOST}/${HOST1}/g" /etc/rundeck/framework.properties
 
-RUN  sed -i "s/${HOST}/${HOST1}/g" /etc/rundeck/rundeck-config.properties
+#RUN  sed -i "s/${HOST}/${HOST1}/g" /etc/rundeck/rundeck-config.properties
 
 #RUN echo "Preparing RUNDECK on ${URL}" && \
 #    sed -i '/dataSource.url/d' /etc/rundeck/rundeck-config.properties && \
@@ -115,6 +109,6 @@ RUN  sed -i "s/${HOST}/${HOST1}/g" /etc/rundeck/rundeck-config.properties
 
 ########   Run Rundeck  ########
 
-CMD while ! echo exit | source /etc/rundeck/profile && ${JAVA_HOME:-/usr}/bin/java ${RDECK_JVM} -cp ${BOOTSTRAP_CP} com.dtolabs.rundeck.RunServer /var/lib/rundeck ${RDECK_HTTP_PORT}
+CMD source /etc/rundeck/profile && ${JAVA_HOME:-/usr}/bin/java ${RDECK_JVM} -cp ${BOOTSTRAP_CP} com.dtolabs.rundeck.RunServer /var/lib/rundeck ${RDECK_HTTP_PORT}
 
 EXPOSE 4440
