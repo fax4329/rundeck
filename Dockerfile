@@ -40,7 +40,7 @@ yum -y clean all
 
 
 #RUN  sed -i '/framework.server.url/d' /etc/rundeck/framework.properties && \
-     echo "framework.server.url = ${URL1}" >> /etc/rundeck/framework.properties
+#     echo "framework.server.url = ${URL1}" >> /etc/rundeck/framework.properties
 
 #RUN  sed -i "s/${HOST}/${HOST1}/g" /etc/rundeck/framework.properties
 
