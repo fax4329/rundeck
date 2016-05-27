@@ -38,7 +38,6 @@ yum -y clean all
 
 ######## Set Rundeck Environment Variables #########
 
-
 #RUN  sed -i '/framework.server.url/d' /etc/rundeck/framework.properties && \
 #     echo "framework.server.url = ${URL1}" >> /etc/rundeck/framework.properties
 
@@ -70,8 +69,7 @@ yum -y clean all
 #    echo "rundeck.storage.converter.1.type=jasypt-encryption" >> /etc/rundeck/rundeck-config.properties && \
 #    echo "rundeck.storage.converter.1.path=keys" >> /etc/rundeck/rundeck-config.properties && \
 #    echo "rundeck.storage.converter.1.config.password=${MYSQL_PASSWORD}" >> /etc/rundeck/rundeck-config.properties && \
-#    sed -i 's/${OLDLDAP}/${NEWLDAP}/g' /etc/rundeck/profile && \
-#    source /etc/rundeck/profile 
+#    sed -i 's/${OLDLDAP}/${NEWLDAP}/g' /etc/rundeck/profile
 
 
 ########  Setup the Jaas-Ldap.conf file  ########
@@ -106,6 +104,11 @@ yum -y clean all
 #    echo "  debug=\"true\"" >> /etc/rundeck/jaas-ldap.conf && \
 #    echo "  file=\"/etc/rundeck/realm.properties\";" >> /etc/rundeck/jaas-ldap.conf && \
 #    echo "};" >> /etc/rundeck/jaas-ldap.conf
+
+######## Change user and ownersheip and permissions ########
+USER rundeck
+
+RUN chown -R rundeck:rundeck /etc/rundeck /var/rundeck /var/lib/rundeck /var/log/rundeck
 
 ########   Run Rundeck  ########
 
