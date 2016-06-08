@@ -4,9 +4,9 @@ MAINTAINER Kedrick Cooper
 
 LABEL Description="RUNDECK Image"
 
-ENV HOST localhost
+#ENV HOST localhost
 #ENV HOST1 192.168.99.100
-ENV URL http://localhost:4440
+ENV SERVER_URL http://localhost:4440
 #ENV URL1 http://192.168.99.100:4440
 #ENV PORT 4440
 #ENV MYSQL_HOST localhost
