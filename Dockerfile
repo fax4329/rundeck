@@ -18,6 +18,8 @@ ENV SERVER_URL http://localhost:4440
 
 ######## Install rundeck and required packages ########
 
+USER root
+
 RUN rpm -Uvh http://repo.rundeck.org/latest.rpm 
 
 ######## Install Java and Rundeck  ########
