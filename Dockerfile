@@ -107,12 +107,15 @@ yum -y clean all
 
 ######## Change user and ownersheip and permissions ########
 
+RUN mkdir -p /tmp/rundeck
+RUN chown -R rundeck:rundeck /tmp/rundeck
 RUN chown -R rundeck:rundeck /etc/rundeck 
 RUN chown -R rundeck:rundeck /var/rundeck 
 RUN chown -R rundeck:rundeck /var/lib/rundeck 
 RUN chown -R rundeck:rundeck /var/log/rundeck
 
 RUN chmod a=rwx /var/log/rundeck
+RUN chmod a=rwx /tmp/rundeck
 RUN chmod -R a=rwx /var/rundeck
 RUN chmod -R a=rwx /etc/rundeck
 RUN chmod -R a=rwx /var/lib/rundeck
