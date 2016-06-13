@@ -37,7 +37,7 @@ yum -y clean all
 
 ######## Change user and ownersheip and permissions ########
 
-RUN cp RDconfig /etc/rundeck
+ADD ./RDconfig /etc/rundeck
 RUN mkdir -p /tmp/rundeck
 RUN chown -R rundeck:rundeck /tmp/rundeck
 RUN chown -R rundeck:rundeck /etc/rundeck
