@@ -36,7 +36,7 @@ echo "grails.mail.port=25" >> /etc/rundeck/rundeck-config.properties
 sed -i 's,framework.server.hostname = .*,framework.server.hostname = '${HOST}',g' /etc/rundeck/framework.properties
 sed -i 's,framework.server.port = .*,framework.server.port = '${PORT}',g' /etc/rundeck/framework.properties
 sed -i 's,framework.server.url = .*,framework.server.url = '${SERVER_URL}',g' /etc/rundeck/framework.properties
-sed -i 's,framework.ssh.timeout = .*,framework.ssh.timeout = 10000',g' /etc/rundeck/framework.properties
+sed -i 's,framework.ssh.timeout = .*,framework.ssh.timeout = 10000,g' /etc/rundeck/framework.properties
 
 ########  Setup the Jaas-Ldap.conf file  ########
 
@@ -56,5 +56,3 @@ echo -n "`date +"%d.%m.%Y %T.%3N"` - Starting ${RUNDECK}"
 cd /var/log/rundeck
 
 /bin/bash -c "$rundeckd" >> /var/log/rundeck/service.log
-
-#source /etc/rundeck/profile && ${JAVA_HOME:-/usr}/bin/java ${RDECK_JVM} -cp ${BOOTSTRAP_CP} com.dtolabs.rundeck.RunServer /var/lib/rundeck ${RDECK_HTTP_PORT}
