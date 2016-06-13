@@ -46,7 +46,7 @@ RUN chown -R rundeck:rundeck /var/rundeck
 RUN chown -R rundeck:rundeck /var/lib/rundeck
 RUN chown -R rundeck:rundeck /var/log/rundeck
 
-RUN chmod u=rwx /etc/rundecl/RDconfig
+RUN chmod u=rwx /etc/rundeck/RDconfig
 RUN chmod a=rwx /var/log/rundeck
 RUN chmod a=rwx /tmp/rundeck
 RUN chmod -R a=rwx /var/rundeck
