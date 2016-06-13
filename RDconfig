@@ -1,0 +1,60 @@
+#!/bin/bash
+
+
+########  Rundeck configurations #########
+
+sed -i 's,grails.serverURL\=.*,grails.serverURL\='${SERVER_URL}',g' /etc/rundeck/rundeck-config.properties
+#sed -i 's,dataSource.url = .*,dataSource.url = jdbc:mysql://'${MYSQL_SERVER}'/rundeckdb?autoReconnect=true,g' /etc/rundeck/rundeck-config.properties
+#sed -i 's,dataSource.username = .*,dataSource.username = '${RUNDECK_USER}',g' /etc/rundeck/rundeck-config.properties
+#sed -i 's,dataSource.password = .*,dataSource.password = '${RUNDECK_PASSWORD}',g' /etc/rundeck/rundeck-config.properties
+
+echo "### Enable DB storage for Project configurations ###" >> /etc/rundeck/rundeck-config.properties
+#echo "rundeck.projectsStorageType=db" >> /etc/rundeck/rundeck-config.properties
+#echo " " >> /etc/rundeck/rundeck-config.properties
+#echo "### Encryption for project config storage ###" >> /etc/rundeck/rundeck-config.properties
+#echo "rundeck.config.storage.converter.1.type=jasypt-encryption" >> /etc/rundeck/rundeck-config.properties
+#echo "rundeck.config.storage.converter.1.path=projects" >> /etc/rundeck/rundeck-config.properties
+#echo "rundeck.config.storage.converter.1.config.password=Ru^d3ck123" >> /etc/rundeck/rundeck-config.properties
+echo " " >> /etc/rundeck/rundeck-config.properties
+echo "### Enable DB for Key Storage ###" >> /etc/rundeck/rundeck-config.properties
+#echo "rundeck.storage.provider.1.type=db" >> /etc/rundeck/rundeck-config.properties
+#echo "rundeck.storage.provider.1.path=keys" >> /etc/rundeck/rundeck-config.properties
+echo "  " >> /etc/rundeck/rundeck-config.properties
+echo "### Encryption for Key Storage ###" >> /etc/rundeck/rundeck-config.properties
+#echo "rundeck.storage.converter.1.type=jasypt-encryption" >> /etc/rundeck/rundeck-config.properties
+#echo "rundeck.storage.converter.1.path=keys" >> /etc/rundeck/rundeck-config.properties
+#echo "rundeck.storage.converter.1.config.password=Ru^d3ck123$" >> /etc/rundeck/rundeck-config.properties
+echo "  " >> /etc/rundeck/rundeck-config.properties
+echo "### Mapped Roles ###"
+#echo "mappedRoles.admin=admin,api_token_group,ps_devops" >> /etc/rundeck/rundeck-config.properties
+echo " " >> /etc/rundeck/rundeck-config.properties
+echo "### Email settings --EC-- ###" >> /etc/rundeck/rundeck-config.properties
+echo "grails.mail.host=localhost" >> /etc/rundeck/rundeck-config.properties
+echo "grails.mail.port=25" >> /etc/rundeck/rundeck-config.properties
+
+
+sed -i 's,framework.server.hostname = .*,framework.server.hostname = '${HOST}',g' /etc/rundeck/framework.properties
+sed -i 's,framework.server.port = .*,framework.server.port = '${PORT}',g' /etc/rundeck/framework.properties
+sed -i 's,framework.server.url = .*,framework.server.url = '${SERVER_URL}',g' /etc/rundeck/framework.properties
+sed -i 's,framework.ssh.timeout = .*,framework.ssh.timeout = 10000',g' /etc/rundeck/framework.properties
+
+########  Setup the Jaas-Ldap.conf file  ########
+
+touch /etc/rundeck/jaas-ldap.conf
+chown rundeck:rundeck /etc/rundeck/jaas-ldap.conf
+
+### START RUNDECK ###
+. /etc/rundeck/profile
+
+RUNDECK="rundeckd"
+PIDFILE=/var/run/$RUNDECK.pid
+DAEMON="${JAVA_HOME:-/usr}/bin/java"
+DAEMON_ARGS="${RDECK_JVM} -cp ${BOOTSTRAP_CP} com.dtolabs.rundeck.RunServer /var/lib/rundeck 4440"
+rundeckd="$DAEMON $DAEMON_ARGS"
+
+echo -n "`date +"%d.%m.%Y %T.%3N"` - Starting ${RUNDECK}"
+cd /var/log/rundeck
+
+/bin/bash -c "$rundeckd" >> /var/log/rundeck/service.log
+
+#source /etc/rundeck/profile && ${JAVA_HOME:-/usr}/bin/java ${RDECK_JVM} -cp ${BOOTSTRAP_CP} com.dtolabs.rundeck.RunServer /var/lib/rundeck ${RDECK_HTTP_PORT}
